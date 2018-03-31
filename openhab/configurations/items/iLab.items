@@ -1,0 +1,15 @@
+Switch RaspiLED	"LED_switch"
+
+/* Security surveillance system */
+Switch SecSwitch "Sec_switch"
+Number Tem "Temperature [%.1f °C]" <temperature> { exec="<[python /home/pi/Documents/binlv_iLab/crontab_yeelink.py &:60000:REGEX((.*?))]" }
+Number Hum "Humidity [%.1f %%]" <temperature> { exec="<[python /home/pi/Documents/binlv_iLab/hun_upload.py &:50000:REGEX((.*?))]" }
+
+// System temperatures
+Group  System_Temperature_Chart (System, Charts)
+Number System_Temperature_Chart_Period "Periode" (System)
+Number System_Temperature_CPU "Temperature CPU [%.1f °C]" <temperature> (System_Temperature_Chart) { exec="<[cat /sys/class/thermal/thermal_zone0/temp:60000:JS(milli.js)]" }
+Number System_Temperature_GPU "Temperature GPU [%.1f °C]" <temperature> (System_Temperature_Chart) { exec="<[/opt/vc/bin/vcgencmd measure_temp:60000:REGEX(temp=(.*?)'C)]" }
+
+/* NTP binding demo item */
+DateTime Date "Date [%1$tA, %1$td.%1$tm.%1$tY]" <calendar> { ntp="Europe/Berlin:de_DE" }

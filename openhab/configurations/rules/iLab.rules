@@ -1,0 +1,34 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+import org.openhab.action.pushover.*
+import org.openhab.action.pushover.internal.*
+ 
+rule "Light changed"
+when
+ Item RaspiLED received command ON
+then
+ logInfo("Light", "Received light command to turn on.")
+ executeCommandLine("python /home/pi/raspLED.py")
+ pushover("LED Light.")
+end
+
+rule "Light changed"
+when
+ Item RaspiLED received command OFF
+then
+ logInfo("Light", "Received light command to turn off.")
+ executeCommandLine("python /home/pi/raspLED_off.py")
+ pushover("LED Light off.")
+end
+
+rule "SecSwitch ON"
+when
+ Item SecSwitch received command ON
+then
+ logInfo("SecSwitch", "Received SecSwitch command to turn on.")
+ executeCommandLine("python /home/pi/Documents/binlv_iLab/binlv_iLab_main.py")
+ pushover("SecSwtich on！")
+ sendMail("1262830768@qq.com","实验室报警系统","管理员：请知悉。当前有人进入实验室!")
+end
+

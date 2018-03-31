@@ -1,0 +1,46 @@
+sitemap iLab label="my iLab"
+{
+	Frame label="Remote Control"
+	{
+		Switch item=RaspiLED
+		Switch item=SecSwitch
+	}
+	Frame label="Lab Environment"
+	{
+		Text item=Tem label="Lab_Temper [%.1f °C]"
+		Text item=Hum label="Lab_Hum [%.1f %%]"
+		Text label="Lab_Gas" icon="fire"		
+	}
+	Frame label="Videokamere" {
+   		Text label="Raspberry kamera" icon="video" {
+     			Frame label="Raspberry kamera" {
+       				Video url="http://localhost:8081?action=stream" encoding="mjpeg"
+     			}
+   		}
+   		Text label="Raspberry kamera" icon="garden" {
+     			Frame label="Raspberry kamera (snapshot)" {
+       				Image url="http://localhost:8081?action=snapshot" refresh=5000
+     			}
+   		}
+ 	}
+	Frame label="Raspberry pi info"
+	{
+		Text item=System_Temperature_CPU label="Temperature [%.1f °C]" {
+			Frame {
+				Text item=System_Temperature_CPU					
+				Text item=System_Temperature_GPU
+			}
+			Frame {
+				Switch item=System_Temperature_Chart_Period mappings=[0="1h", 1="4h", 2="8h", 3="12h", 4="24h"]
+				Chart  item=System_Temperature_Chart period=h   refresh=60000 visibility=[System_Temperature_Chart_Period==0, System_Temperature_Chart_Period=="Uninitialized"]
+				Chart  item=System_Temperature_Chart period=4h  refresh=60000 visibility=[System_Temperature_Chart_Period==1]
+				Chart  item=System_Temperature_Chart period=8h  refresh=60000 visibility=[System_Temperature_Chart_Period==2]
+				Chart  item=System_Temperature_Chart period=12h refresh=60000 visibility=[System_Temperature_Chart_Period==3]
+				Chart  item=System_Temperature_Chart period=D   refresh=60000 visibility=[System_Temperature_Chart_Period==4]
+			}
+		}
+	}
+	Frame label="Date" {
+		Text item=Date
+	}
+}
